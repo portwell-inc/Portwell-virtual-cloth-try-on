@@ -31,6 +31,9 @@ MANIFEST
 *.manifest
 *.spec
 
+openpose_python/bin
+openpose_python/models
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
