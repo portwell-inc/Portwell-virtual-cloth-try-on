@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+.vscode/
+custom_layers/__pycache__/
+data/
+models/
+logs/
