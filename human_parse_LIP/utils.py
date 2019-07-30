@@ -7,11 +7,11 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.python.client import device_lib
 
-from config import num_classes
+from human_parse_LIP.config import num_classes
 
 # Load the color prior factor that encourages rare classes
-prior_factor = np.load("data/prior_factor.npy")
-prior_factor = prior_factor.astype(np.float32)
+# prior_factor = np.load("data/prior_factor.npy")
+# prior_factor = prior_factor.astype(np.float32)
 
 
 def cross_entropy(y_true, y_pred):
@@ -65,12 +65,12 @@ def get_best_model():
     import re
     pattern = 'model.(?P<epoch>\d+)-(?P<val_loss>[0-9]*\.?[0-9]*).hdf5'
     p = re.compile(pattern)
-    files = [f for f in os.listdir('models/') if p.match(f)]
+    files = [f for f in os.listdir('./human_parse_LIP/models/') if p.match(f)]
     filename = None
     if len(files) > 0:
         accs = [float(p.match(f).groups()[1]) for f in files]
         best_index = int(np.argmax(accs))
-        filename = os.path.join('models', files[best_index])
+        filename = os.path.join('human_parse_LIP\models', files[best_index])
     print('loading best model: {}'.format(filename))
     return filename
 

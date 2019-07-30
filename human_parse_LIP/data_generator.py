@@ -5,7 +5,7 @@ from cv2 import cv2 as cv
 import numpy as np
 from keras.utils import Sequence
 from keras.utils import to_categorical
-from config import batch_size, img_rows, img_cols, num_classes, color_map
+from human_parse_LIP.config import batch_size, img_rows, img_cols, num_classes, color_map
 
 
 def random_choice(image_size):

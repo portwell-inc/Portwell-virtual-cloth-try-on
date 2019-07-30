@@ -6,10 +6,10 @@ from cv2 import cv2 as cv
 import keras.backend as K
 import numpy as np
 
-from config import num_classes
-from data_generator import random_choice, safe_crop
-from model import build_model
-from utils import get_best_model
+from human_parse_LIP.config import num_classes
+from human_parse_LIP.data_generator import random_choice, safe_crop
+from human_parse_LIP.model import build_model
+from human_parse_LIP.utils import get_best_model
 
 def LIP_model():
     model = build_model()
@@ -39,7 +39,7 @@ def human_parse_predict(model, human_img):
     return label_out
 
 if __name__ == '__main__':
-    image = cv.imread('./data/instance-level_human_parsing/Testing/Images/000001_0.jpg')
+    image = cv.imread('./data/000001_0.jpg')
     model = LIP_model()
     human_parse = human_parse_predict(model, image)
     cv.imwrite('images/test.png', human_parse)

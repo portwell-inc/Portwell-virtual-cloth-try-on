@@ -5,7 +5,7 @@ from keras.models import Model
 from keras.utils import multi_gpu_model
 from keras.utils import plot_model
 
-from custom_layers.unpooling_layer import Unpooling
+from human_parse_LIP.custom_layers.unpooling_layer import Unpooling
 
 
 def build_model():
