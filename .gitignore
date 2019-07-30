@@ -31,6 +31,8 @@ MANIFEST
 *.manifest
 *.spec
 
+human_parse_LIP/models
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
