@@ -1,6 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
+*.py[co]
 *$py.class
 
 # C extensions
@@ -31,8 +31,10 @@ MANIFEST
 *.manifest
 *.spec
 
-human_parse_LIP/models
 
+openpose_python/models
+openpose_python/bin
+human_parse_LIP/models
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
