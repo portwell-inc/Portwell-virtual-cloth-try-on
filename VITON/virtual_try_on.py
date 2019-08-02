@@ -93,10 +93,6 @@ def test_gmm(opt, model, c, cm_array, im, parse_array, pose_label):
     cm.unsqueeze_(0)
 
     # human parse
-    for i in range(256):
-        for j in range(192):
-            if(parse_array[i][j]==10):
-                parse_array[i][j] = 0
     parse_shape = (parse_array > 0).astype(np.float32)
     parse_head = (parse_array == 1).astype(np.float32) + \
             (parse_array == 2).astype(np.float32) + \

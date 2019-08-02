@@ -2,8 +2,9 @@ import torchvision.transforms as transforms
 from PIL import Image
 import numpy as np
 import json
+import time
 
-from VITON.VITON import VITON
+from VITON.VITON import VITON, viton_model_init
 
 if __name__ == "__main__":
     
@@ -33,4 +34,12 @@ if __name__ == "__main__":
         pose_label = json.load(f)
 
     # call VITON module
-    result = VITON(c, cm_array, im, parse_array, pose_label)
+    start = time.clock()
+    stage1_model, stage2_model = viton_model_init()
+    end = time.clock()
+    print(end-start)
+
+    start = time.clock()
+    result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
+    end = time.clock()
+    print(end-start)
