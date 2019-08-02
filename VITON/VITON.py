@@ -4,40 +4,51 @@ import torchvision.transforms as transforms
 from PIL import Image
 import numpy as np
 import json
+import time
 
 from VITON.virtual_try_on import get_gmm_opt, get_tom_opt, test_gmm, test_tom, save_gmm_img, save_tom_img
 from VITON.networks import GMM, UnetGenerator, load_checkpoint
 
-def stage1_predict(c, cm_array, im, parse_array, pose_label):
+def viton_model_init():
+    print("initial model...")
+    
+    opt = get_gmm_opt()
+
+    stage1_model = GMM(opt)
+    load_checkpoint(stage1_model, opt.checkpoint)
+
+    opt = get_tom_opt()
+
+    stage2_model = UnetGenerator(25, 4, 6, ngf=64, norm_layer=nn.InstanceNorm2d)
+    load_checkpoint(stage2_model, opt.checkpoint)
+    return stage1_model, stage2_model
+
+def stage1_predict(c, cm_array, im, parse_array, pose_label, stage2_model):
     opt = get_gmm_opt()
     print("Start to test stage: %s, named: %s!" % (opt.stage, opt.name))
     
-    model = GMM(opt)
-    load_checkpoint(model, opt.checkpoint)
     with torch.no_grad():
-        ca, ma, agn = test_gmm(opt, model, c, cm_array, im, parse_array, pose_label)
+        ca, ma, agn = test_gmm(opt, stage2_model, c, cm_array, im, parse_array, pose_label)
     
-    save_gmm_img(opt, ca, ma)
+    # save_gmm_img(opt, ca, ma)
     print('Finished test %s, named: %s!' % (opt.stage, opt.name))
     return ca, agn
 
 
-def stage2_predict(c, agnostic):
+def stage2_predict(c, agnostic, stage2_model):
     opt = get_tom_opt()
     print("Start to test stage: %s, named: %s!" % (opt.stage, opt.name))
     
-    model = UnetGenerator(25, 4, 6, ngf=64, norm_layer=nn.InstanceNorm2d)
-    load_checkpoint(model, opt.checkpoint)
     with torch.no_grad():
-        result = test_tom(opt, model, c, agnostic)
+        result = test_tom(opt, stage2_model, c, agnostic)
 
-    save_tom_img(opt, result)
+    # save_tom_img(opt, result)
     print('Finished test %s, named: %s!' % (opt.stage, opt.name))
     return result
 
 
-def VITON(c, cm_array, im, parse_array, pose_label):
-    ca, agn = stage1_predict(c, cm_array, im, parse_array, pose_label)
+def VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model):
+    ca, agn = stage1_predict(c, cm_array, im, parse_array, pose_label, stage1_model)
 
     transform = transforms.Compose([  \
         transforms.ToTensor(),   \
@@ -45,7 +56,7 @@ def VITON(c, cm_array, im, parse_array, pose_label):
 
     c = transform(ca)  # [-1,1]
     
-    result = stage2_predict(c, agn)
+    result = stage2_predict(c, agn, stage2_model)
 
     return result
 
@@ -77,4 +88,12 @@ if __name__ == "__main__":
     with open('VITON/data/pose/000057_0_keypoints.json') as f:
         pose_label = json.load(f)
 
-    result = VITON(c, cm_array, im, parse_array, pose_label)
+    start = time.clock()
+    stage1_model, stage2_model = viton_model_init()
+    end = time.clock()
+    print(end-start)
+
+    start = time.clock()
+    result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
+    end = time.clock()
+    print(end-start)
