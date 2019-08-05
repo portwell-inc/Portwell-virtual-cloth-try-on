@@ -5,10 +5,12 @@ import cv2
 import sys
 import os
 
-#read input
-input_dir = sys.stdin.read()
-
-image = cv2.imread(input_dir + '/image.jpg')
+#read input and resize
+image = cv2.imread('shot.jpg')
+image = image[50:450, 150:450]
+image = cv2.resize(image, (192, 256), interpolation=cv2.INTER_CUBIC)
+cv2.imwrite("image.jpg",image)
+os.remove('shot.jpg')
 
 keypoint = openpose_keypoint(image)
 new_dic = {"version": 1.0, 
@@ -17,9 +19,9 @@ new_dic = {"version": 1.0,
 	"pose_keypoints": keypoint, 
 	"hand_right_keypoints": [], 
 	"hand_left_keypoints": []}]}
-with open(input_dir + "/keypoint.json","w") as f:
+with open("keypoint.json","w") as f:
 	json.dump(new_dic,f)
 
 model = LIP_model()
 human_parse = human_parse_predict(model, image)
-cv2.imwrite(input_dir + "/parse.jpg",human_parse)
+cv2.imwrite("parse.jpg",human_parse)
