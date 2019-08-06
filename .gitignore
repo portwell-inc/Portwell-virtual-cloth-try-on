@@ -36,6 +36,12 @@ openpose_python/models
 openpose_python/bin
 human_parse_LIP/models
 flask_session
+
+
+.vscode/settings.json
+
+
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
