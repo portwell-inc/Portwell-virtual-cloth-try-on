@@ -18,11 +18,11 @@ def home():
 
 @app.route("/demo")
 def demo():
-    return render_template('basic.html')
+    return render_template('demo.html')
 
-@app.route("/test")
-def test():
-    return render_template('test.html')
+@app.route("/tryon")
+def tryon():
+    return render_template('tryon.html')
 
 @app.route("/new_picture_api",methods=['GET'])
 def new_picture_api():
