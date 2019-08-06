@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<script language="JavaScript">
+		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        $.getJSON($SCRIPT_ROOT + '/new_picture_get', 
+        	function(data){
+          		console.log(data['image'])
+          		document.getElementById('results').innerHTML =
+					'<h2>Here is your image:</h2>' + 
+					'<img ng-src="'+data['image']+'"/>';
+            }
+        ); 
+	</script>
+</head>
+<body>
+	<div id="results">Your captured image will appear here...</div>
+</body>
+</html>

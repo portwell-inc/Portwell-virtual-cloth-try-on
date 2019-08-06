@@ -1,15 +1,12 @@
 from flask import Flask, render_template,redirect,url_for,request,jsonify,flash,session
 from flask_session import Session
-from base64 import b64decode
+import base64
 from VITON.VITON import VITON, viton_model_init
-from subprocess import run, PIPE
-import subprocess
-import json
+from subprocess import run
+import json, os, sys
 import cv2
-import os,sys
 
 app = Flask(__name__)
-#SESSION_TYPE = 'redis'
 app.config.from_object(__name__)
 app.secret_key = "025300a65059e046175068af08abe39d"
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -27,6 +24,10 @@ def demo():
 def tryon():
     return render_template('tryon.html')
 
+@app.route("/test")
+def test():
+    return render_template('test.html')
+
 @app.route("/new_picture_api",methods=['GET'])
 def new_picture_api():
     if request.method == "GET":
@@ -35,7 +36,7 @@ def new_picture_api():
         image = request.values.get("image")
         data_uri = image
         header, encoded = data_uri.split(",", 1)
-        data = b64decode(encoded)
+        data = base64.b64decode(encoded)
         with open("shot.jpg", "wb") as f:
             f.write(data)
     
@@ -51,8 +52,36 @@ def new_picture_api():
         os.remove('image.jpg')
         os.remove('parse.jpg')
         os.remove('keypoint.json')
-    
+
     return jsonify('OK')
+
+@app.route("/new_picture_get",methods=['GET'])
+def new_picture_get():
+    image = session.get('image', 'not set')
+
+    if image != 'not set':
+        image = cv2.resize(image, (300, 400), interpolation=cv2.INTER_CUBIC)
+        img_str = cv2.imencode('.jpg', image)[1].tostring()
+        b64_code = str(base64.b64encode(img_str))
+        b64_code = 'data:image/jpeg;base64,' + b64_code[2:-1]
+        return jsonify({ 'image' : b64_code })
+    else:
+        return jsonify({ 'image' : 'not found' })
+
+
+# @app.route("/VTO_api")
+# def VTO_api():
+
+#     #get data from session
+#     image = session.get('image', 'not set')
+#     parse = session.get('parse', 'not set')
+#     keypoint = session.get('keypoint', 'not set')
+
+#     #get cloth mask
+
+#     stage1_model, stage2_model = viton_model_init()
+#     result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
+#     return 
 
 # @app.route("/get")
 # def get():
@@ -64,13 +93,6 @@ def new_picture_api():
 def reset():
     session.clear()
     return 'OK'
-
-# @app.route("/VTO_api")
-# def VTO_api():
-#     stage1_model, stage2_model = viton_model_init()
-#     result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
-#     return 
-
 
 if __name__ == '__main__':
     app.debug = True
