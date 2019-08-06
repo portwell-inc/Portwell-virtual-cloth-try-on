@@ -35,6 +35,12 @@ MANIFEST
 openpose_python/models
 openpose_python/bin
 human_parse_LIP/models
+
+
+.vscode/settings.json
+
+
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
