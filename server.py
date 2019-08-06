@@ -24,10 +24,6 @@ def demo():
 def tryon():
     return render_template('tryon.html')
 
-@app.route("/test")
-def test():
-    return render_template('test.html')
-
 @app.route("/new_picture_api",methods=['GET'])
 def new_picture_api():
     if request.method == "GET":
