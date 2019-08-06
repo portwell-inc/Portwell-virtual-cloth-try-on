@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Portwell Virtual Try On Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
+	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+	<meta name="author" content="FREEHTML5.CO" />
+
+  	<!-- 
+	//////////////////////////////////////////////////////
+
+	FREE HTML5 TEMPLATE 
+	DESIGNED & DEVELOPED by FREEHTML5.CO
+	
+	Website: 		http://freehtml5.co/
+	Email: 			info@freehtml5.co
+	Twitter: 		http://twitter.com/fh5co
+	Facebook: 	https://www.facebook.com/fh5co
+
+	//////////////////////////////////////////////////////
+	 -->
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+
+  	<!-- Google Webfont -->
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+	<!-- Themify Icons -->
+	<link rel="stylesheet" href="../static/css/themify-icons.css">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="../static/css/bootstrap.css">
+	<!-- Owl Carousel -->
+	<link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="../static/css/magnific-popup.css">
+	<!-- Superfish -->
+	<link rel="stylesheet" href="../static/css/superfish.css">
+	<!-- Easy Responsive Tabs -->
+	<link rel="stylesheet" href="../static/css/easy-responsive-tabs.css">
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="../static/css/animate.css">
+	<!-- Theme Style -->
+	<link rel="stylesheet" href="../static/css/style.css">
+
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<!-- Modernizr JS -->
+	<script src="../static/js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="../static/js/respond.min.js"></script>
+	<![endif]-->
+
+	<!--dialog-->
+	<style type="text/css">
+	.dialog{
+		position: fixed; top: 70px; left: 25%; transform: translate(-10px, 0px);width: 620px; padding: 10px;
+		border: 1px solid #888888; background-color: #eeeeee; box-shadow: 0px 0px 10px #000000;
+		display: none;
+	}
+	</style>
+	<script>
+		var dialog;
+		window.onload=function(){
+			dialog=document.getElementById("dialog");
+		}
+		function showDialog(){
+			dialog.style.display="block";
+		}
+		function closeDialog(){
+			dialog.style.display="none";
+		}
+	</script>
+
+</head>
+<body>
+		<!-- START #fh5co-header -->
+		<header id="fh5co-header-section" role="header" class="" >
+			<div class="container">
+				<!-- <div id="fh5co-menu-logo"> -->
+					<!-- START #fh5co-logo -->
+					<h1 id="fh5co-logo" class="pull-left"><a href="index.html"><img src="../static/images/logo.png" alt="Slant Free HTML5 Template"></a></h1>
+					
+					<!-- START #fh5co-menu-wrap -->
+					<nav id="fh5co-menu-wrap" role="navigation">
+						
+						
+						<ul class="sf-menu" id="fh5co-primary-menu">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="index.html">API</a></li>
+							<li class="active"><a href="demo.html">Demo</a></li>
+							<li class="fh5co-special"><a href="index.html">Get started</a></li>
+						</ul>
+					</nav>
+				<!-- </div> -->
+
+			</div>
+		</header>
+		
+		<div><img src="../static/images/hero6.jpg" width="100%" height="70px"/></div>
+
+		<div style="margin-left: auto; margin-right: auto;">
+			<script type="text/javascript" src="../static/js/webcam.min.js"></script>
+			<script type="text/javascript" src="../static/js/countdown.js"></script>
+			<script type="text/javascript" src="../static/js/dialog.js"></script>
+
+			<div style="width: 25%; text-align: center; vertical-align: top; display: inline-block;">
+				<div style="height: 50px"></div>
+				<button style="border: 0px; background-color: white;" onclick="countDown10s()">
+					<img src="../static/images/camera.png" width="100px" height="100px" background-color="white"/>
+				</button>
+				<div style="height: 50px"></div>
+				<div id="countDown" style="font-size: 150px"></div>
+			</div>
+
+			<div style="width: 44%; text-align: center; vertical-align: top; display: inline-block;">
+				<div id="human_border" style="height: 50px; width: 600px; position: relative; top: 100px;">
+					<img src="../static/images/human border.png"/>
+				</div>
+				<div id="my_camera"></div>
+				<script language="JavaScript">
+					Webcam.set({
+						width: 600,
+						height: 450,
+						image_format: 'jpeg',
+						jpeg_quality: 200
+					});
+					Webcam.attach( '#my_camera' );
+				</script>
+			</div>
+			<div id="dialog" class="dialog">
+				<div style="position: absolute; top: 10px; right: 100px; cursor: pointer;" id="container">
+					<div style="color: forestgreen;" onclick="confirm_picture(picutre_temp)">Ok</div>
+				</div>
+				<div style="position: absolute; top: 10px; right: 30px; cursor: pointer;" onclick="closeDialog()"><a style="color: orangered;">Retake</a></div>
+				<div id="results">Your photo will appear here...</div>
+			</div>		
+
+			<script language="JavaScript">
+				var picutre_temp = ''
+				function countDown10s(){
+					// countdown
+					countDown.init('countDown', take_snapshot);
+					countDown.start();
+				}
+				function take_snapshot() {
+					// take snapshot and get image data
+					Webcam.snap( function(data_uri) {
+						picutre_temp = data_uri;
+						// display results in page
+						showDialog();
+						document.getElementById('results').innerHTML =
+							'Here is your image. Use this one ?' + 
+							'<img src="'+data_uri+'"/>';
+					} );
+				}
+				function confirm_picture(uri) {
+					$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        			$.getJSON($SCRIPT_ROOT + '/new_picture_api', {image : uri}, 
+        				function(data){
+          					console.log(data)
+          					if(data == 'OK'){
+          						window.location = '{{ url_for('tryon') }}';
+          					}
+            			}
+          			); 
+				}
+			</script>
+		</div>
+		
+
+			
+		<!-- jQuery -->
+		<script src="../static/js/jquery-1.10.2.min.js"></script>
+		<!-- jQuery Easing -->
+		<script src="../static/js/jquery.easing.1.3.js"></script>
+		<!-- Bootstrap -->
+		<script src="../static/js/bootstrap.js"></script>
+		<!-- Owl carousel -->
+		<script src="../static/js/owl.carousel.min.js"></script>
+		<!-- Magnific Popup -->
+		<script src="../static/js/jquery.magnific-popup.min.js"></script>
+		<!-- Superfish -->
+		<script src="../static/js/hoverIntent.js"></script>
+		<script src="../static/js/superfish.js"></script>
+		<!-- Easy Responsive Tabs -->
+		<script src="../static/js/easyResponsiveTabs.js"></script>
+		<!-- FastClick for Mobile/Tablets -->
+		<script src="../static/js/fastclick.js"></script>
+		<!-- Parallax -->
+		<script src="../static/js/jquery.parallax-scroll.min.js"></script>
+		<!-- Waypoints -->
+		<script src="../static/js/jquery.waypoints.min.js"></script>
+		<!-- Main JS -->
+		<script src="../static/js/main.js"></script>
+
+	</body>
+</html>
