@@ -24,6 +24,10 @@ def demo():
 def tryon():
     return render_template('tryon.html')
 
+@app.route("/test")
+def test():
+    return render_template('test.html')
+
 @app.route("/new_picture_api",methods=['GET'])
 def new_picture_api():
     if request.method == "GET":
@@ -54,11 +58,12 @@ def new_picture_api():
 @app.route("/new_picture_get",methods=['GET'])
 def new_picture_get():
     image = session.get('image', 'not set')
+
     if image != 'not set':
         image = cv2.resize(image, (300, 400), interpolation=cv2.INTER_CUBIC)
         img_str = cv2.imencode('.jpg', image)[1].tostring()
         b64_code = str(base64.b64encode(img_str))
-        b64_code = 'data:image/jpeg;base64,' + b64_code[2:]
+        b64_code = 'data:image/jpeg;base64,' + b64_code[2:-1]
         return jsonify({ 'image' : b64_code })
     else:
         return jsonify({ 'image' : 'not found' })
