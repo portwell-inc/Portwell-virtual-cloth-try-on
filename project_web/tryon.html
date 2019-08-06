@@ -66,28 +66,6 @@
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
-
-	<!--dialog-->
-	<style type="text/css">
-	.dialog{
-		position: fixed; top: 70px; left: 25%; transform: translate(-10px, 0px);width: 620px; padding: 10px;
-		border: 1px solid #888888; background-color: #eeeeee; box-shadow: 0px 0px 10px #000000;
-		display: none;
-	}
-	</style>
-	<script>
-		var dialog;
-		window.onload=function(){
-			dialog=document.getElementById("dialog");
-		}
-		function showDialog(){
-			dialog.style.display="block";
-		}
-		function closeDialog(){
-			dialog.style.display="none";
-		}
-	</script>
-
 </head>
 <body>
 		<!-- START #fh5co-header -->
@@ -114,62 +92,6 @@
 		</header>
 		
 		<div><img src="images/hero6.jpg" width="100%" height="70px"/></div>
-
-		<div style="margin-left: auto; margin-right: auto;">
-			<script type="text/javascript" src="js/webcam.min.js"></script>
-			<script type="text/javascript" src="js/countdown.js"></script>
-			<script type="text/javascript" src="js/dialog.js"></script>
-
-			<div style="width: 25%; text-align: center; vertical-align: top; display: inline-block;">
-				<div style="height: 50px"></div>
-				<button style="border: 0px; background-color: white;" onclick="countDown10s()">
-					<img src="images/camera.png" width="100px" height="100px" background-color="white"/>
-				</button>
-				<div style="height: 50px"></div>
-				<div id="countDown" style="font-size: 150px"></div>
-			</div>
-
-			<div style="width: 44%; text-align: center; vertical-align: top; display: inline-block;">
-				<div id="human_border" style="height: 50px; width: 600px; position: relative; top: 100px;">
-					<img src="images/human border.png"/>
-				</div>
-				<div id="my_camera"></div>
-				<script language="JavaScript">
-					Webcam.set({
-						width: 600,
-						height: 450,
-						image_format: 'jpeg',
-						jpeg_quality: 200
-					});
-					Webcam.attach( '#my_camera' );
-				</script>
-			</div>
-			<div id="dialog" class="dialog">
-				<div style="position: absolute; top: 10px; right: 100px; cursor: pointer;"><a style="color: forestgreen;" href="tryon.html">Ok</a></div>
-				<div style="position: absolute; top: 10px; right: 30px; cursor: pointer;" onclick="closeDialog()"><a style="color: orangered;">Retake</a></div>
-				<div id="results">Your photo will appear here...</div>
-			</div>		
-
-			<script language="JavaScript">
-				function countDown10s(){
-					// countdown
-					countDown.init('countDown', take_snapshot);
-					countDown.start();
-				}
-				function take_snapshot() {
-					// take snapshot and get image data
-					Webcam.snap( function(data_uri) {
-						console.log(typeof(data_uri))
-						// display results in page
-						showDialog();
-						document.getElementById('results').innerHTML =
-							'Here is your image. Use this one ?' + 
-							'<img src="'+data_uri+'"/>';
-					} );
-				}
-			</script>
-		</div>
-		
 
 			
 		<!-- jQuery -->
