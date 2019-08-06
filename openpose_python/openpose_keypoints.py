@@ -13,7 +13,7 @@ import subprocess
 def openpose_keypoint(img_mat):
 
     MODEL_POSE = 'COCO'
-    MODEL_DIR = 'models/'
+    MODEL_DIR = 'openpose_python/models/'
     OUTPUT_DIR = 'result/'
 
     # Import Openpose (Windows/Ubuntu/OSX)
