@@ -1,10 +1,13 @@
 from flask import Flask, render_template,redirect,url_for,request,jsonify,flash,session
 from flask_session import Session
-import base64
 from VITON.VITON import VITON, viton_model_init
+import torchvision.transforms as transforms
 from subprocess import run
 import json, os, sys
+from PIL import Image
+import numpy as np
 import cv2
+import base64
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -45,7 +48,8 @@ def new_picture_api():
         #run subprocess and load data to session
         run('python new_picture.py')
         image = cv2.imread('image.jpg')
-        parse = cv2.imread('parse.jpg')
+        parse = cv2.imread('parse.jpg', cv2.IMREAD_GRAYSCALE)
+        keypoint = {}
         with open("keypoint.json") as f:
             keypoint = json.load(f)
         session['keypoint'] = keypoint
@@ -73,25 +77,48 @@ def new_picture_get():
 @app.route("/VTO_api",methods=['GET'])
 def VTO_api():
     if request.method == "GET":
-        cloth = request.values.get("cloth")
-        print(cloth, file=sys.stderr)
+        #get cloht picture
+        cloth_path = request.values.get("cloth")
+        cloth_path = cloth_path[3:]
+        cloth = cv2.imread(cloth_path)
+        #get cloth mask
+        mask_path = cloth_path.replace('cloth','cloth_mask')
+        cloth_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+        #get data from session
+        image = session.get('image', 'not set')
+        parse = session.get('parse', 'not set')
+        keypoint = session.get('keypoint', 'not set')
 
-    #get data from session
-    # image = session.get('image', 'not set')
-    # parse = session.get('parse', 'not set')
-    # keypoint = session.get('keypoint', 'not set')
 
-    # #get cloth mask
+        # cloth_mask = np.reshape(cloth_mask,(256,192))
+        # parse = np.reshape(parse,(256,192))
+        print(image.shape ,file=sys.stderr)
+        print(cloth.shape ,file=sys.stderr)
+        print(cloth_mask.shape ,file=sys.stderr)
+        print(parse.shape ,file=sys.stderr)
+        print(keypoint ,file=sys.stderr)
 
-    # stage1_model, stage2_model = viton_model_init()
-    # result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
+        #data transform
+        transform = transforms.Compose([  \
+            transforms.ToTensor(),   \
+            transforms.Normalize([0.5], [0.5])])
+        cloth = Image.fromarray(cv2.cvtColor(cloth,cv2.COLOR_BGR2RGB))
+        cloth = transform(cloth)
+        image = Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
+        image = transform(image)
+
+        #call VITON api
+        stage1_model, stage2_model = viton_model_init()
+        result = VITON(cloth, cloth_mask, image, parse, keypoint, stage1_model, stage2_model)
+
     return jsonify('OK')
 
 # @app.route("/get")
 # def get():
 #     keypoint = session.get('keypoint', 'not set')
-#     print(keypoint, file=sys.stderr)
-#     return 'OK'
+#     image = session.get('image', 'not set')
+#     parse = session.get('parse', 'not set')
+#     return {'keypoint' : keypoint, 'image' : image, 'parse' : parse}
 
 @app.route("/reset")
 def reset():
