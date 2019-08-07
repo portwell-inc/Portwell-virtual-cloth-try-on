@@ -92,9 +92,9 @@
 					<nav id="fh5co-menu-wrap" role="navigation">
 						<ul class="sf-menu" id="fh5co-primary-menu">
 							<li><a href="{{ url_for('home') }}">Home</a></li>
-							<li><a href="index.html">API</a></li>
+							<li><a href="{{ url_for('home') }}">API</a></li>
 							<li class="active"><a href="{{ url_for('demo') }}">Demo</a></li>
-							<li class="fh5co-special"><a href="index.html">Get started</a></li>
+							<li class="fh5co-special"><a href="{{ url_for('home') }}">Get started</a></li>
 						</ul>
 					</nav>
 				<!-- </div> -->
@@ -105,7 +105,7 @@
 
 		<div style="width: 25%; text-align: center; vertical-align: top; display: inline-block;">
 			<div style="height: 50px"></div>
-			<button style="border: 0px; background-color: white;" onclick="location.href='demo.html'">
+			<button style="border: 0px; background-color: white;" onclick="location.href='{{ url_for('demo') }}'">
 				<img src="../static/images/camera.png" width="100px" height="100px" background-color="white"/>
 			</button>
 			<div style="font-size: 20px">Retake Photo</div>
@@ -138,8 +138,10 @@
 				$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
         		$.getJSON($SCRIPT_ROOT + '/VTO_api', {'cloth' : cloth} ,
         			function(data){
-        				console.log(data)
-            		});
+        				document.getElementById('new_pic_con').innerHTML =
+        				'<img width="300px" height="400px" src="'+data['image']+'"/>'
+            		}
+				);
 			}
 		</script>
 

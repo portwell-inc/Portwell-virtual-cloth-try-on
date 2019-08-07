@@ -37,6 +37,8 @@ def tryon():
 def new_picture_api():
     if request.method == "GET":
 
+        session.clear()
+
         # get image uri and decode
         image = request.values.get("image")
         data_uri = image
@@ -89,15 +91,6 @@ def VTO_api():
         parse = session.get('parse', 'not set')
         keypoint = session.get('keypoint', 'not set')
 
-
-        # cloth_mask = np.reshape(cloth_mask,(256,192))
-        # parse = np.reshape(parse,(256,192))
-        print(image.shape ,file=sys.stderr)
-        print(cloth.shape ,file=sys.stderr)
-        print(cloth_mask.shape ,file=sys.stderr)
-        print(parse.shape ,file=sys.stderr)
-        print(keypoint ,file=sys.stderr)
-
         #data transform
         transform = transforms.Compose([  \
             transforms.ToTensor(),   \
@@ -111,19 +104,23 @@ def VTO_api():
         stage1_model, stage2_model = viton_model_init()
         result = VITON(cloth, cloth_mask, image, parse, keypoint, stage1_model, stage2_model)
 
-    return jsonify('OK')
+        # print(result, file=sys.stderr)
+        # print(type(result), file=sys.stderr)
 
-# @app.route("/get")
-# def get():
-#     keypoint = session.get('keypoint', 'not set')
-#     image = session.get('image', 'not set')
-#     parse = session.get('parse', 'not set')
-#     return {'keypoint' : keypoint, 'image' : image, 'parse' : parse}
+        result = cv2.cvtColor(np.asarray(result),cv2.COLOR_RGB2BGR)
+        result = cv2.resize(result, (300, 400), interpolation=cv2.INTER_CUBIC)
+        img_str = cv2.imencode('.jpg', result)[1].tostring()
+        b64_code = str(base64.b64encode(img_str))
+        b64_code = 'data:image/jpeg;base64,' + b64_code[2:-1]
 
-@app.route("/reset")
-def reset():
-    session.clear()
-    return 'OK'
+    return jsonify({ 'image' : b64_code })
+
+@app.route("/get")
+def get():
+    keypoint = session.get('keypoint', 'not set')
+    image = session.get('image', 'not set')
+    parse = session.get('parse', 'not set')
+    return jsonify({'keypoint' : keypoint, 'image' : image, 'parse' : parse})
 
 if __name__ == '__main__':
     app.debug = True
