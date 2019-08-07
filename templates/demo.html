@@ -90,7 +90,6 @@
 			dialog.style.display="none";
 		}
 	</script>
-
 </head>
 <body>
 		<!-- START #fh5co-header -->
@@ -153,7 +152,10 @@
 				</div>
 				<div style="position: absolute; top: 10px; right: 30px; cursor: pointer;" onclick="closeDialog()"><a style="color: orangered;">Retake</a></div>
 				<div id="results">Your photo will appear here...</div>
-			</div>		
+			</div>
+			<div id="loading" class="dialog">
+				<div><img src="static/images/loading.gif" loop=infinite/></div>
+			</div>			
 
 			<script language="JavaScript">
 				var picutre_temp = ''
@@ -174,13 +176,26 @@
 					} );
 				}
 				function confirm_picture(uri) {
+					document.getElementById('dialog').innerHTML =
+						'<div style="width: 620px; height:480px;">'+
+						'<div style="position: relative; top: 120px; left: 210px;">'+
+						'<img src="static/images/loading.gif" width="200px" height="200px" loop=infinite/>'+
+						'<div style="height: 50px"></div>'+
+						'<div style="position: relative; left: 20px;">Uploading photo now...</div>'+
+						'</div></div>';
 					$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
         			$.getJSON($SCRIPT_ROOT + '/new_picture_api', {image : uri}, 
         				function(data){
           					console.log(data)
           					if(data == 'OK'){
+								document.getElementById('dialog').innerHTML =
+									'Upload complete !';
           						window.location = '{{ url_for('tryon') }}';
           					}
+							else{
+								document.getElementById('dialog').innerHTML =
+									'You are not at right position, please retake one.';
+							}
             			}
           			); 
 				}
