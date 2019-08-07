@@ -115,9 +115,9 @@ class FeatureRegression(nn.Module):
         self.linear = nn.Linear(64 * 4 * 3, output_dim)
         self.tanh = nn.Tanh()
         if use_cuda:
-            self.conv.cuda()
-            self.linear.cuda()
-            self.tanh.cuda()
+            self.conv = self.conv.cuda()
+            self.linear = self.linear.cuda()
+            self.tanh = self.tanh.cuda()
 
     def forward(self, x):
         x = self.conv(x)
@@ -386,7 +386,7 @@ class VGGLoss(nn.Module):
     def __init__(self, layids = None):
         super(VGGLoss, self).__init__()
         self.vgg = Vgg19()
-        self.vgg.cuda()
+        self.vgg = self.vgg.cuda()
         self.criterion = nn.L1Loss()
         self.weights = [1.0/32, 1.0/16, 1.0/8, 1.0/4, 1.0]
         self.layids = layids
@@ -428,11 +428,11 @@ def save_checkpoint(model, save_path):
         os.makedirs(os.path.dirname(save_path))
 
     torch.save(model.cpu().state_dict(), save_path)
-    model.cuda()
+    model = model.cuda()
 
 def load_checkpoint(model, checkpoint_path):
     if not os.path.exists(checkpoint_path):
         return
     model.load_state_dict(torch.load(checkpoint_path))
-    model.cuda()
+    model = model.cuda()
 
