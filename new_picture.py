@@ -13,14 +13,8 @@ cv2.imwrite("image.jpg",image)
 os.remove('shot.jpg')
 
 keypoint = openpose_keypoint(image)
-new_dic = {"version": 1.0, 
-	"people": [{
-	"face_keypoints": [], 
-	"pose_keypoints": keypoint, 
-	"hand_right_keypoints": [], 
-	"hand_left_keypoints": []}]}
 with open("keypoint.json","w") as f:
-	json.dump(new_dic,f)
+	json.dump(keypoint,f)
 
 model = LIP_model()
 human_parse = human_parse_predict(model, image)

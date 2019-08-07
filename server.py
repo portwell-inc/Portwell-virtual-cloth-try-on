@@ -1,10 +1,13 @@
 from flask import Flask, render_template,redirect,url_for,request,jsonify,flash,session
 from flask_session import Session
-import base64
 from VITON.VITON import VITON, viton_model_init
+import torchvision.transforms as transforms
 from subprocess import run
 import json, os, sys
+from PIL import Image
+import numpy as np
 import cv2
+import base64
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -22,15 +25,19 @@ def demo():
 
 @app.route("/tryon")
 def tryon():
-    return render_template('tryon.html')
-
-@app.route("/test")
-def test():
-    return render_template('test.html')
+    di = 'static/images/cloth/'
+    files_dir = os.listdir(di)
+    cloth_dir = []
+    for file in files_dir:
+        new_file = '../' + di + file
+        cloth_dir.append(new_file)
+    return render_template('tryon.html',cloth_dir = cloth_dir)
 
 @app.route("/new_picture_api",methods=['GET'])
 def new_picture_api():
     if request.method == "GET":
+
+        session.clear()
 
         # get image uri and decode
         image = request.values.get("image")
@@ -70,31 +77,51 @@ def new_picture_get():
     else:
         return jsonify({ 'image' : 'not found' })
 
+@app.route("/VTO_api",methods=['GET'])
+def VTO_api():
+    if request.method == "GET":
+        #get cloht picture
+        cloth_path = request.values.get("cloth")
+        cloth_path = cloth_path[3:]
+        cloth = cv2.imread(cloth_path)
+        #get cloth mask
+        mask_path = cloth_path.replace('cloth','cloth_mask')
+        cloth_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+        #get data from session
+        image = session.get('image', 'not set')
+        parse = session.get('parse', 'not set')
+        keypoint = session.get('keypoint', 'not set')
 
-# @app.route("/VTO_api")
-# def VTO_api():
+        #data transform
+        transform = transforms.Compose([  \
+            transforms.ToTensor(),   \
+            transforms.Normalize([0.5], [0.5])])
+        cloth = Image.fromarray(cv2.cvtColor(cloth,cv2.COLOR_BGR2RGB))
+        cloth = transform(cloth)
+        image = Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
+        image = transform(image)
 
-#     #get data from session
-#     image = session.get('image', 'not set')
-#     parse = session.get('parse', 'not set')
-#     keypoint = session.get('keypoint', 'not set')
+        #call VITON api
+        stage1_model, stage2_model = viton_model_init()
+        result = VITON(cloth, cloth_mask, image, parse, keypoint, stage1_model, stage2_model)
 
-#     #get cloth mask
+        # print(result, file=sys.stderr)
+        # print(type(result), file=sys.stderr)
 
-#     stage1_model, stage2_model = viton_model_init()
-#     result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
-#     return 
+        result = cv2.cvtColor(np.asarray(result),cv2.COLOR_RGB2BGR)
+        result = cv2.resize(result, (300, 400), interpolation=cv2.INTER_CUBIC)
+        img_str = cv2.imencode('.jpg', result)[1].tostring()
+        b64_code = str(base64.b64encode(img_str))
+        b64_code = 'data:image/jpeg;base64,' + b64_code[2:-1]
 
-# @app.route("/get")
-# def get():
-#     keypoint = session.get('keypoint', 'not set')
-#     print(keypoint, file=sys.stderr)
-#     return 'OK'
+    return jsonify({ 'image' : b64_code })
 
-@app.route("/reset")
-def reset():
-    session.clear()
-    return 'OK'
+@app.route("/get")
+def get():
+    keypoint = session.get('keypoint', 'not set')
+    image = session.get('image', 'not set')
+    parse = session.get('parse', 'not set')
+    return jsonify({'keypoint' : keypoint, 'image' : image, 'parse' : parse})
 
 if __name__ == '__main__':
     app.debug = True
