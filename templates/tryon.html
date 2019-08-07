@@ -6,7 +6,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Slant &mdash; A free HTML5 Template by FREEHTML5.CO</title>
+	<title>Portwell Virtual Try on</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -93,7 +93,7 @@
 						<ul class="sf-menu" id="fh5co-primary-menu">
 							<li><a href="{{ url_for('home') }}">Home</a></li>
 							<li><a href="index.html">API</a></li>
-							<li class="active"><a href="demo.html">Demo</a></li>
+							<li class="active"><a href="{{ url_for('demo') }}">Demo</a></li>
 							<li class="fh5co-special"><a href="index.html">Get started</a></li>
 						</ul>
 					</nav>
@@ -122,14 +122,26 @@
 			<div style="height: 50px"></div>
 			<div style="width: 100%; height: 420px; overflow-y: scroll;">
 				<!--a cloth-->
+				{% for cloth in cloth_dir %}
 				<div style="width: 210px; height: 280px; position: relative; top: 20px; left: 20px; float: left;">
 					<div style="width: 192px; height: 256px; box-shadow: 0px 0px 5px #000000;">
-						<img>
+						<img src="{{ cloth }}" onclick="VITON('{{ cloth }}')">
 					</div>
 				</div>
+				{% endfor %} 
 				<!--a cloth end-->
 			</div>
 		</div>
+
+		<script language="JavaScript">
+			function VITON(cloth){
+				$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        		$.getJSON($SCRIPT_ROOT + '/VTO_api', {'cloth' : cloth} ,
+        			function(data){
+        				console.log(data)
+            		});
+			}
+		</script>
 
 		<!-- jQuery -->
 		<script src="../static/js/jquery-1.10.2.min.js"></script>

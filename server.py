@@ -22,7 +22,13 @@ def demo():
 
 @app.route("/tryon")
 def tryon():
-    return render_template('tryon.html')
+    di = 'static/images/cloth/'
+    files_dir = os.listdir(di)
+    cloth_dir = []
+    for file in files_dir:
+        new_file = '../' + di + file
+        cloth_dir.append(new_file)
+    return render_template('tryon.html',cloth_dir = cloth_dir)
 
 @app.route("/new_picture_api",methods=['GET'])
 def new_picture_api():
@@ -64,20 +70,22 @@ def new_picture_get():
     else:
         return jsonify({ 'image' : 'not found' })
 
+@app.route("/VTO_api",methods=['GET'])
+def VTO_api():
+    if request.method == "GET":
+        cloth = request.values.get("cloth")
+        print(cloth, file=sys.stderr)
 
-# @app.route("/VTO_api")
-# def VTO_api():
+    #get data from session
+    # image = session.get('image', 'not set')
+    # parse = session.get('parse', 'not set')
+    # keypoint = session.get('keypoint', 'not set')
 
-#     #get data from session
-#     image = session.get('image', 'not set')
-#     parse = session.get('parse', 'not set')
-#     keypoint = session.get('keypoint', 'not set')
+    # #get cloth mask
 
-#     #get cloth mask
-
-#     stage1_model, stage2_model = viton_model_init()
-#     result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
-#     return 
+    # stage1_model, stage2_model = viton_model_init()
+    # result = VITON(c, cm_array, im, parse_array, pose_label, stage1_model, stage2_model)
+    return jsonify('OK')
 
 # @app.route("/get")
 # def get():
