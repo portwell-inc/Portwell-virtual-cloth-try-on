@@ -78,8 +78,8 @@ def save_tom_img(opt, p_tryon_array):
     
 
 def test_gmm(opt, model, c, cm_array, im, parse_array, pose_label):
-    model.cuda()
-    model.eval()
+    model = model.cuda()
+    model = model.eval()
 
     base_name = os.path.basename(opt.checkpoint)
 
@@ -170,12 +170,16 @@ def test_gmm(opt, model, c, cm_array, im, parse_array, pose_label):
 
     ma = Image.fromarray(mask_array)
 
+    # release 
+    del model
+    torch.cuda.empty_cache()
+
     return ca, ma, agnostic
 
 
 def test_tom(opt, model, c, agnostic):
-    model.cuda()
-    model.eval()
+    model = model.cuda()
+    model = model.eval()
     
     base_name = os.path.basename(opt.checkpoint)
     
@@ -202,4 +206,8 @@ def test_tom(opt, model, c, agnostic):
 
     pto = Image.fromarray(p_tryon_array)
 
+    # release 
+    del model
+    torch.cuda.empty_cache()
+    
     return pto
