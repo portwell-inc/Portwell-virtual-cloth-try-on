@@ -42,18 +42,20 @@ def new_picture_api():
     
         #run subprocess and load data to session
         run('python new_picture.py')
-        image = cv2.imread('image.jpg')
-        parse = cv2.imread('parse.jpg')
-        with open("keypoint.json") as f:
-            keypoint = json.load(f)
-        session['keypoint'] = keypoint
-        session['image'] = image
-        session['parse'] = parse
-        os.remove('image.jpg')
-        os.remove('parse.jpg')
-        os.remove('keypoint.json')
-
-    return jsonify('OK')
+        try:    
+            image = cv2.imread('image.jpg')
+            parse = cv2.imread('parse.jpg')
+            with open("keypoint.json") as f:
+                keypoint = json.load(f)
+            session['keypoint'] = keypoint
+            session['image'] = image
+            session['parse'] = parse
+            os.remove('image.jpg')
+            os.remove('parse.jpg')
+            os.remove('keypoint.json')
+            return jsonify('OK')
+        except:
+            return jsonify('Error')
 
 @app.route("/new_picture_get",methods=['GET'])
 def new_picture_get():
