@@ -51,7 +51,7 @@ def new_picture_api():
         run('python new_picture.py')
         try:    
             image = cv2.imread('image.jpg')
-            parse = cv2.imread('parse.jpg')
+            parse = cv2.imread('parse.jpg', cv2.IMREAD_GRAYSCALE)
             with open("keypoint.json") as f:
                 keypoint = json.load(f)
             session['keypoint'] = keypoint
@@ -118,10 +118,11 @@ def VTO_api():
 
 @app.route("/get")
 def get():
-    keypoint = session.get('keypoint', 'not set')
+    # keypoint = session.get('keypoint', 'not set')
     image = session.get('image', 'not set')
-    parse = session.get('parse', 'not set')
-    return jsonify({'keypoint' : keypoint, 'image' : image, 'parse' : parse})
+    print(image, file=sys.stderr)
+    # parse = session.get('parse', 'not set')
+    return keypoint
 
 if __name__ == '__main__':
     app.debug = True
