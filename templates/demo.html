@@ -152,10 +152,7 @@
 				</div>
 				<div style="position: absolute; top: 10px; right: 30px; cursor: pointer;" onclick="closeDialog()"><a style="color: orangered;">Retake</a></div>
 				<div id="results">Your photo will appear here...</div>
-			</div>
-			<div id="loading" class="dialog">
-				<div><img src="static/images/loading.gif" loop=infinite/></div>
-			</div>			
+			</div>		
 
 			<script language="JavaScript">
 				var picutre_temp = ''
@@ -170,6 +167,11 @@
 						picutre_temp = data_uri;
 						// display results in page
 						showDialog();
+						document.getElementById('dialog').innerHTML=
+						'<div style="position: absolute; top: 10px; right: 100px; cursor: pointer;" id="container">'+
+						'<div style="color: forestgreen;" onclick="confirm_picture(picutre_temp)">Ok</div></div>'+
+						'<div style="position: absolute; top: 10px; right: 30px; cursor: pointer;" onclick="closeDialog()"><a style="color: orangered;">Retake</a></div>'+
+						'<div id="results">Your photo will appear here...</div>';
 						document.getElementById('results').innerHTML =
 							'Here is your image. Use this one ?' + 
 							'<img src="'+data_uri+'"/>';
@@ -192,9 +194,18 @@
 									'Upload complete !';
           						window.location = '{{ url_for('tryon') }}';
           					}
-							else{
+							else if(data == 'Error'){
 								document.getElementById('dialog').innerHTML =
-									'You are not at right position, please retake one.';
+									'<div style="width: 620px; height:480px; text-align: center;">'+
+									'<div style="position: relative; top: 120px;">'+
+									'<img src="static/images/error.png" width="200px" height="200px" loop=infinite/>'+
+									'<div style="height: 50px"></div>'+
+									'<div>Undesirable picture !</div>'+
+									'<div>Please retake one.</div>'+
+									'<div style="height: 20px"></div>'+
+									'<div><button onclick="closeDialog()">Retake</button></div>'
+									'</div></div>';
+								picutre_temp = ''
 							}
             			}
           			); 
