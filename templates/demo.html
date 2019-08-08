@@ -131,9 +131,10 @@
 				<div style="height: 50px"></div>
 				<div id="countDown" style="font-size: 150px"></div>
 
-				<button style="border: 0px; background-color: white;" onclick="">
-					<img src="../static/images/folder.png" width="100px" height="100px" background-color="white"/>
-				</button>
+				<label style="cursor: pointer;">
+					<img src="../static/images/folder.png" width='100px' height='100px'/>
+					<input type="file" onchange="upload_picture(this)" targetID="preview_progressbarTW_img" accept="image/jpeg" style="display: none;" />
+				</label>
 				<div style="font-size: 20px">Uplaod Photo</div>
 			</div>
 
@@ -215,6 +216,26 @@
 							}
             			}
           			); 
+				}
+				function upload_picture(input) {
+					if(input.files && input.files[0]){
+						//var imageTagID = input.getAttribute("targetID");
+						var reader = new FileReader();
+    					reader.onload = function (e) {
+    						showDialog();
+							document.getElementById('dialog').innerHTML=
+							'<div style="position: absolute; top: 10px; right: 100px; cursor: pointer;" id="container">'+
+							'<div style="color: forestgreen;" onclick="confirm_picture(picutre_temp)">Ok</div></div>'+
+							'<div style="position: absolute; top: 10px; right: 30px; cursor: pointer;" onclick="closeDialog()"><a style="color: orangered;">Retake</a></div>'+
+							'<div id="results">Your photo will appear here...</div>';
+							document.getElementById('results').innerHTML =
+								'Here is your image. Use this one ?' + 
+								'<img src="'+e.target.result+'"/>';
+       						// var img = document.getElementById(imageTagID);
+       						// img.setAttribute("src", e.target.result)
+    					}
+    					reader.readAsDataURL(input.files[0]);
+					}
 				}
 			</script>
 		</div>
