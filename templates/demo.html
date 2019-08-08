@@ -107,7 +107,7 @@
 							<li><a href="{{ url_for('home') }}">Home</a></li>
 							<li><a href="{{ url_for('home') }}">API</a></li>
 							<li class="active"><a href="{{ url_for('demo') }}">Demo</a></li>
-							<li class="fh5co-special"><a href="{{ url_for('home') }}">Get started</a></li>
+							<!-- <li class="fh5co-special"><a href="{{ url_for('home') }}">Get started</a></li> -->
 						</ul>
 					</nav>
 				<!-- </div> -->
@@ -127,8 +127,14 @@
 				<button style="border: 0px; background-color: white;" onclick="countDown10s()">
 					<img src="../static/images/camera.png" width="100px" height="100px" background-color="white"/>
 				</button>
+				<div style="font-size: 20px">Take Photo</div>
 				<div style="height: 50px"></div>
 				<div id="countDown" style="font-size: 150px"></div>
+
+				<button style="border: 0px; background-color: white;" onclick="">
+					<img src="../static/images/folder.png" width="100px" height="100px" background-color="white"/>
+				</button>
+				<div style="font-size: 20px">Uplaod Photo</div>
 			</div>
 
 			<div style="width: 44%; text-align: center; vertical-align: top; display: inline-block;">
@@ -233,7 +239,7 @@
 		<!-- FastClick for Mobile/Tablets -->
 		<script src="../static/js/fastclick.js"></script>
 		<!-- Parallax -->
-		<script src="../static/js/jquery.parallax-scroll.min.js"></script>
+		<!-- <script src="../static/js/jquery.parallax-scroll.min.js"></script> -->
 		<!-- Waypoints -->
 		<script src="../static/js/jquery.waypoints.min.js"></script>
 		<!-- Main JS -->
