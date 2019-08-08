@@ -39,13 +39,22 @@ def new_picture_api():
 
         session.clear()
 
-        # get image uri and decode
+        # get image uri and decode to numpy array
         image = request.values.get("image")
         data_uri = image
         header, encoded = data_uri.split(",", 1)
         data = base64.b64decode(encoded)
-        with open("shot.jpg", "wb") as f:
-            f.write(data)
+        nparr = np.fromstring(data,np.uint8)
+        image = cv2.imdecode(nparr,cv2.COLOR_BGR2RGB)
+
+        #check picture is from camera or uplaod
+        if image.shape == (450, 600, 3):
+            # resize image to 192*256
+            image = image[50:450, 150:450]
+            image = cv2.resize(image, (192, 256), interpolation=cv2.INTER_CUBIC)
+            cv2.imwrite("image.jpg",image)
+        else:
+            cv2.imwrite("image.jpg",image)
     
         #run subprocess and load data to session
         run('python new_picture.py')
@@ -57,9 +66,9 @@ def new_picture_api():
             session['keypoint'] = keypoint
             session['image'] = image
             session['parse'] = parse
-            os.remove('image.jpg')
-            os.remove('parse.jpg')
-            os.remove('keypoint.json')
+            # os.remove('image.jpg')
+            # os.remove('parse.jpg')
+            # os.remove('keypoint.json')
             return jsonify('OK')
         except:
             return jsonify('Error')
@@ -104,6 +113,7 @@ def VTO_api():
         #call VITON api
         stage1_model, stage2_model = viton_model_init()
         result = VITON(cloth, cloth_mask, image, parse, keypoint, stage1_model, stage2_model)
+        result.save('result.jpg')
 
         # print(result, file=sys.stderr)
         # print(type(result), file=sys.stderr)
@@ -122,7 +132,7 @@ def get():
     image = session.get('image', 'not set')
     print(image, file=sys.stderr)
     # parse = session.get('parse', 'not set')
-    return keypoint
+    return 'OK'
 
 if __name__ == '__main__':
     app.debug = True
