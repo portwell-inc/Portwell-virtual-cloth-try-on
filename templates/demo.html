@@ -223,6 +223,7 @@
 						var reader = new FileReader();
     					reader.onload = function (e) {
     						showDialog();
+    						picutre_temp = e.target.result
 							document.getElementById('dialog').innerHTML=
 							'<div style="position: absolute; top: 10px; right: 100px; cursor: pointer;" id="container">'+
 							'<div style="color: forestgreen;" onclick="confirm_picture(picutre_temp)">Ok</div></div>'+
@@ -231,11 +232,10 @@
 							document.getElementById('results').innerHTML =
 								'Here is your image. Use this one ?' + 
 								'<img src="'+e.target.result+'"/>';
-       						// var img = document.getElementById(imageTagID);
-       						// img.setAttribute("src", e.target.result)
     					}
     					reader.readAsDataURL(input.files[0]);
 					}
+					picutre_temp = ''
 				}
 			</script>
 		</div>
