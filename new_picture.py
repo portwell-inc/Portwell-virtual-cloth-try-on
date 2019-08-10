@@ -13,4 +13,4 @@ with open("keypoint.json","w") as f:
 
 model = LIP_model()
 human_parse = human_parse_predict(model, image)
-cv2.imwrite("parse.jpg",human_parse)
+cv2.imwrite("parse.png",human_parse)

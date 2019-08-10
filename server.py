@@ -60,7 +60,7 @@ def new_picture_api():
         run('python new_picture.py')
         try:    
             image = cv2.imread('image.jpg')
-            parse = cv2.imread('parse.jpg', cv2.IMREAD_GRAYSCALE)
+            parse = cv2.imread('parse.png', cv2.IMREAD_GRAYSCALE)
             with open("keypoint.json") as f:
                 keypoint = json.load(f)
             session['keypoint'] = keypoint
@@ -93,6 +93,7 @@ def VTO_api():
         cloth_path = request.values.get("cloth")
         cloth_path = cloth_path[3:]
         cloth = cv2.imread(cloth_path)
+        #cloth = Image.open(cloth_path)
         #get cloth mask
         mask_path = cloth_path.replace('cloth','cloth_mask')
         cloth_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
@@ -108,6 +109,7 @@ def VTO_api():
         cloth = Image.fromarray(cv2.cvtColor(cloth,cv2.COLOR_BGR2RGB))
         cloth = transform(cloth)
         image = Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
+        image.save('img_result.jpg')
         image = transform(image)
 
         #call VITON api
