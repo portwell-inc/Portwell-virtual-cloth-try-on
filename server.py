@@ -39,27 +39,36 @@ def new_picture_api():
 
         session.clear()
 
-        # get image uri and decode
+        # get image uri and decode to numpy array
         image = request.values.get("image")
         data_uri = image
         header, encoded = data_uri.split(",", 1)
         data = base64.b64decode(encoded)
-        with open("shot.jpg", "wb") as f:
-            f.write(data)
+        nparr = np.fromstring(data,np.uint8)
+        image = cv2.imdecode(nparr,cv2.COLOR_BGR2RGB)
+
+        #check picture is from camera or uplaod
+        if image.shape == (450, 600, 3):
+            # resize image to 192*256
+            image = image[50:450, 150:450]
+            image = cv2.resize(image, (192, 256), interpolation=cv2.INTER_CUBIC)
+            cv2.imwrite("image.jpg",image)
+        else:
+            cv2.imwrite("image.jpg",image)
     
         #run subprocess and load data to session
         run('python new_picture.py')
         try:    
             image = cv2.imread('image.jpg')
-            parse = cv2.imread('parse.jpg', cv2.IMREAD_GRAYSCALE)
+            parse = cv2.imread('parse.png', cv2.IMREAD_GRAYSCALE)
             with open("keypoint.json") as f:
                 keypoint = json.load(f)
             session['keypoint'] = keypoint
             session['image'] = image
             session['parse'] = parse
-            os.remove('image.jpg')
-            os.remove('parse.jpg')
-            os.remove('keypoint.json')
+            # os.remove('image.jpg')
+            # os.remove('parse.jpg')
+            # os.remove('keypoint.json')
             return jsonify('OK')
         except:
             return jsonify('Error')
@@ -84,6 +93,7 @@ def VTO_api():
         cloth_path = request.values.get("cloth")
         cloth_path = cloth_path[3:]
         cloth = cv2.imread(cloth_path)
+        #cloth = Image.open(cloth_path)
         #get cloth mask
         mask_path = cloth_path.replace('cloth','cloth_mask')
         cloth_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
@@ -99,11 +109,13 @@ def VTO_api():
         cloth = Image.fromarray(cv2.cvtColor(cloth,cv2.COLOR_BGR2RGB))
         cloth = transform(cloth)
         image = Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
+        image.save('img_result.jpg')
         image = transform(image)
 
         #call VITON api
         stage1_model, stage2_model = viton_model_init()
         result = VITON(cloth, cloth_mask, image, parse, keypoint, stage1_model, stage2_model)
+        result.save('result.jpg')
 
         # print(result, file=sys.stderr)
         # print(type(result), file=sys.stderr)
@@ -122,7 +134,7 @@ def get():
     image = session.get('image', 'not set')
     print(image, file=sys.stderr)
     # parse = session.get('parse', 'not set')
-    return keypoint
+    return 'OK'
 
 if __name__ == '__main__':
     app.debug = True
