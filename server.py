@@ -13,6 +13,10 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = "025300a65059e046175068af08abe39d"
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] ='flask_session'
+app.config['SESSION_FILE_THRESHOLD'] = 500
+app.config['SESSION_USE_SIGNER'] = False
+app.config['SESSION_PERMANENT'] = True
 Session(app)
 
 @app.route("/")
@@ -136,9 +140,20 @@ def get():
     # parse = session.get('parse', 'not set')
     return keypoint
 
+@app.route("/check_session")
+def check_session():
+    keypoint = session.get('keypoint', 'not set')
+    image = session.get('image', 'not set')
+    parse = session.get('parse', 'not set')
+    #print(type(keypoint), file=sys.stderr)
+    if keypoint=='not set' or parse=='not set' or image=='not set':
+        return '<script language=\'javascript\'>alert(\'Sorry system run error\'); window.location=\'demo\'</script>'
+    else:
+        return redirect('/tryon')
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
-    sess = Session()
-    sess.init_app(app)
+    # sess = Session()
+    # sess.init_app(app)
     #print(, file=sys.stderr)
