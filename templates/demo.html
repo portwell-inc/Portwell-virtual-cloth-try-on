@@ -199,7 +199,7 @@
           					if(data == 'OK'){
 								document.getElementById('dialog').innerHTML =
 									'Upload complete !';
-          						window.location = '{{ url_for('tryon') }}';
+          						window.location = '{{ url_for('check_session') }}';
           					}
 							else if(data == 'Error'){
 								document.getElementById('dialog').innerHTML =
