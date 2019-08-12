@@ -107,7 +107,7 @@
 							<li><a href="{{ url_for('home') }}">Home</a></li>
 							<li><a href="{{ url_for('home') }}">API</a></li>
 							<li class="active"><a href="{{ url_for('demo') }}">Demo</a></li>
-							<li class="fh5co-special"><a href="{{ url_for('home') }}">Get started</a></li>
+							<!-- <li class="fh5co-special"><a href="{{ url_for('home') }}">Get started</a></li> -->
 						</ul>
 					</nav>
 				<!-- </div> -->
@@ -127,8 +127,15 @@
 				<button style="border: 0px; background-color: white;" onclick="countDown10s()">
 					<img src="../static/images/camera.png" width="100px" height="100px" background-color="white"/>
 				</button>
+				<div style="font-size: 20px">Take Photo</div>
 				<div style="height: 50px"></div>
 				<div id="countDown" style="font-size: 150px"></div>
+
+				<label style="cursor: pointer;">
+					<img src="../static/images/folder.png" width='100px' height='100px'/>
+					<input type="file" onchange="upload_picture(this)" targetID="preview_progressbarTW_img" accept="image/jpeg" style="display: none;" />
+				</label>
+				<div style="font-size: 20px">Uplaod Photo</div>
 			</div>
 
 			<div style="width: 44%; text-align: center; vertical-align: top; display: inline-block;">
@@ -210,6 +217,26 @@
             			}
           			); 
 				}
+				function upload_picture(input) {
+					if(input.files && input.files[0]){
+						//var imageTagID = input.getAttribute("targetID");
+						var reader = new FileReader();
+    					reader.onload = function (e) {
+    						showDialog();
+    						picutre_temp = e.target.result
+							document.getElementById('dialog').innerHTML=
+							'<div style="position: absolute; top: 10px; right: 100px; cursor: pointer;" id="container">'+
+							'<div style="color: forestgreen;" onclick="confirm_picture(picutre_temp)">Ok</div></div>'+
+							'<div style="position: absolute; top: 10px; right: 30px; cursor: pointer;" onclick="closeDialog()"><a style="color: orangered;">Retake</a></div>'+
+							'<div id="results">Your photo will appear here...</div>';
+							document.getElementById('results').innerHTML =
+								'Here is your image. Use this one ?' + 
+								'<img src="'+e.target.result+'"/>';
+    					}
+    					reader.readAsDataURL(input.files[0]);
+					}
+					picutre_temp = ''
+				}
 			</script>
 		</div>
 		
@@ -233,7 +260,7 @@
 		<!-- FastClick for Mobile/Tablets -->
 		<script src="../static/js/fastclick.js"></script>
 		<!-- Parallax -->
-		<script src="../static/js/jquery.parallax-scroll.min.js"></script>
+		<!-- <script src="../static/js/jquery.parallax-scroll.min.js"></script> -->
 		<!-- Waypoints -->
 		<script src="../static/js/jquery.waypoints.min.js"></script>
 		<!-- Main JS -->
