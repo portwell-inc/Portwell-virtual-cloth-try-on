@@ -1,4 +1,5 @@
 from flask import Flask, render_template,redirect,url_for,request,jsonify,flash,session
+from multiprocessing import Pool
 from flask_session import Session
 from VITON.VITON import VITON, viton_model_init
 import torchvision.transforms as transforms
@@ -18,6 +19,29 @@ app.config['SESSION_FILE_THRESHOLD'] = 500
 app.config['SESSION_USE_SIGNER'] = False
 app.config['SESSION_PERMANENT'] = True
 Session(app)
+
+def Call_VITON(data):
+    #get cloht picture
+    cloth = cv2.imread(data[0])
+    #get cloth mask
+    mask_path = data[0].replace('cloth','cloth_mask')
+    cloth_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+
+    #data transform
+    transform = transforms.Compose([  \
+        transforms.ToTensor(),   \
+        transforms.Normalize([0.5], [0.5])])
+    cloth = Image.fromarray(cv2.cvtColor(cloth,cv2.COLOR_BGR2RGB))
+    cloth = transform(cloth)
+    image = Image.fromarray(cv2.cvtColor(data[1],cv2.COLOR_BGR2RGB))
+    image = transform(image)
+
+    #call VITON api
+    stage1_model, stage2_model = viton_model_init()
+    result = VITON(cloth, cloth_mask, image, data[2], data[3], stage1_model, stage2_model)
+
+    return result
+
 
 @app.route("/")
 def home():
@@ -96,35 +120,18 @@ def VTO_api():
         #get cloht picture
         cloth_path = request.values.get("cloth")
         cloth_path = cloth_path[3:]
-        cloth = cv2.imread(cloth_path)
-        #cloth = Image.open(cloth_path)
-        #get cloth mask
-        mask_path = cloth_path.replace('cloth','cloth_mask')
-        cloth_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-        #get data from session
+     
+        # #get data from session
         image = session.get('image', 'not set')
         parse = session.get('parse', 'not set')
         keypoint = session.get('keypoint', 'not set')
 
-        #data transform
-        transform = transforms.Compose([  \
-            transforms.ToTensor(),   \
-            transforms.Normalize([0.5], [0.5])])
-        cloth = Image.fromarray(cv2.cvtColor(cloth,cv2.COLOR_BGR2RGB))
-        cloth = transform(cloth)
-        image = Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
-        #image.save('img_result.jpg')
-        image = transform(image)
+        #call VITON
+        arg = [cloth_path,image,parse,keypoint]
+        with Pool(1) as p:
+            result = p.map(Call_VITON,[arg])
 
-        #call VITON api
-        stage1_model, stage2_model = viton_model_init()
-        result = VITON(cloth, cloth_mask, image, parse, keypoint, stage1_model, stage2_model)
-        #result.save('result.jpg')
-
-        # print(result, file=sys.stderr)
-        # print(type(result), file=sys.stderr)
-
-        result = cv2.cvtColor(np.asarray(result),cv2.COLOR_RGB2BGR)
+        result = cv2.cvtColor(np.asarray(result[0]),cv2.COLOR_RGB2BGR)
         result = cv2.resize(result, (300, 400), interpolation=cv2.INTER_CUBIC)
         img_str = cv2.imencode('.jpg', result)[1].tostring()
         b64_code = str(base64.b64encode(img_str))
