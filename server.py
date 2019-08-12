@@ -66,9 +66,9 @@ def new_picture_api():
             session['keypoint'] = keypoint
             session['image'] = image
             session['parse'] = parse
-            # os.remove('image.jpg')
-            # os.remove('parse.jpg')
-            # os.remove('keypoint.json')
+            os.remove('image.jpg')
+            os.remove('parse.png')
+            os.remove('keypoint.json')
             return jsonify('OK')
         except:
             return jsonify('Error')
@@ -109,13 +109,13 @@ def VTO_api():
         cloth = Image.fromarray(cv2.cvtColor(cloth,cv2.COLOR_BGR2RGB))
         cloth = transform(cloth)
         image = Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
-        image.save('img_result.jpg')
+        #image.save('img_result.jpg')
         image = transform(image)
 
         #call VITON api
         stage1_model, stage2_model = viton_model_init()
         result = VITON(cloth, cloth_mask, image, parse, keypoint, stage1_model, stage2_model)
-        result.save('result.jpg')
+        #result.save('result.jpg')
 
         # print(result, file=sys.stderr)
         # print(type(result), file=sys.stderr)
@@ -130,11 +130,11 @@ def VTO_api():
 
 @app.route("/get")
 def get():
-    # keypoint = session.get('keypoint', 'not set')
+    keypoint = session.get('keypoint', 'not set')
     image = session.get('image', 'not set')
     print(image, file=sys.stderr)
     # parse = session.get('parse', 'not set')
-    return 'OK'
+    return keypoint
 
 if __name__ == '__main__':
     app.debug = True
