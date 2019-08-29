@@ -101,12 +101,23 @@ def test_gmm(opt, model, c, cm_array, im, parse_array, pose_label):
     parse_cloth = (parse_array == 5).astype(np.float32) + \
             (parse_array == 6).astype(np.float32) + \
             (parse_array == 7).astype(np.float32)
+    # plus lowerbody
+    parse_lowerbody = (parse_array == 8).astype(np.float32) + \
+        (parse_array == 9).astype(np.float32) + \
+        (parse_array == 12).astype(np.float32) + \
+        (parse_array == 16).astype(np.float32) + \
+        (parse_array == 17).astype(np.float32) + \
+        (parse_array == 18).astype(np.float32) + \
+        (parse_array == 19).astype(np.float32)
+        
+    p_paste_part = parse_head + parse_lowerbody
+
     # shape downsample
     parse_shape = Image.fromarray((parse_shape*255).astype(np.uint8))
     parse_shape = parse_shape.resize((opt.fine_width//16, opt.fine_height//16), Image.BILINEAR)
     parse_shape = parse_shape.resize((opt.fine_width, opt.fine_height), Image.BILINEAR)
     shape = transform(parse_shape) # [-1,1]
-    phead = torch.from_numpy(parse_head) # [0,1]
+    phead = torch.from_numpy(p_paste_part) # [0,1]
     pcm = torch.from_numpy(parse_cloth) # [0,1]
 
     # upper cloth
