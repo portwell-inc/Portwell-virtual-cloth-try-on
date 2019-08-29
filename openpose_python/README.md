@@ -1,11 +1,24 @@
-## OpenPose Module
-***
-### Demo
-1. Download bin and models files on [google dirve](https://drive.google.com/file/d/1L04V5EL60BPmmKIK1aSOqM9QdJnHu0HX/view?usp=sharing) and put in "openpose_python" folder
-2. Put target image in "image" folder
-3. Run demo.py
-***
-### Package Requirement
-1. python 3.6.x
-2. openCV
-3. numpy
+# OpenPose Module
+
+## Requirement
+1. **Window10**
+2. **請務必使用python 3.6.x**
+```
+pip install numpy
+pip install opencv
+```
+
+## Demo
+1. 從[google dirve]('https://drive.google.com/drive/u/1/folders/1D5kQKnYaSF9uIBYlf9PSMpi5BytFTYSG')下載bin跟model兩個資料夾，並放在"openpose_python"目錄下
+2. 在"openpose_python"目錄下創一個"image"資料夾，將欲處理的圖片放在image裡
+```
+python demo.py
+```
+
+## Usage
+Function **openpose_keypoint()** 輸入numpy圖片，回傳人體keypoints
+```
+from openpose_keypoints import openpose_keypoint
+
+dic = openpose_keypoint(image)
+```
