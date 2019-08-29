@@ -14,7 +14,7 @@ pip install Pillow
 pip install flask
 pip install flask_session
 ```
-**Step3：安裝VITON 與 human_parse**
+**Step3：安裝[VITON](./VITON/README.md), [human_parse](./human_parse_LIP/README.md) 與[openpose](./openpose_python/README.md)**
 
 
 ## Demo
