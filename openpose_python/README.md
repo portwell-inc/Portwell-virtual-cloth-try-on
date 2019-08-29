@@ -10,9 +10,9 @@ pip install opencv-python
 
 ## Demo
 1. 從[google dirve](https://drive.google.com/drive/u/1/folders/1D5kQKnYaSF9uIBYlf9PSMpi5BytFTYSG)下載bin跟model兩個資料夾，並放在"openpose_python"目錄下
-2. 在"openpose_python"目錄下創一個"image"資料夾，將欲處理的圖片放在image裡
+2. 在"openpose_python"目錄下創一個"image"資料夾，將欲處理的圖片放在image裡, 並且將圖片名稱命名為`000001_0.jpg`
 ```
-python demo.py
+python openpose_python\demo.py
 ```
 
 ## Usage
