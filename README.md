@@ -21,4 +21,4 @@ pip install flask_session
 ```
 python server.py
 ```
-在瀏覽器中開啟http://localhost:5000/demo開始demo
+在瀏覽器中開啟 http://localhost:5000/demo 開始demo
