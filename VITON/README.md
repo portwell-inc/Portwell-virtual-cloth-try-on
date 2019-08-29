@@ -1,13 +1,13 @@
 # VITON Module
 
 ## Requirement
-1. PyTorch 安裝請參考[官網]('https://pytorch.org')
+1. PyTorch 安裝請參考[官網](https://pytorch.org)
 ```
 pip install tensorboardX
 ```
 
 ## Test
-1. 從[Google Drive]('https://drive.google.com/drive/u/1/folders/1tW67WtAGv_yVjwyEc_wGGIxxbTJ7oJOJ')下載'checkpoints'資料夾(trained model)，放在目錄'VITON'
+1. 從[Google Drive](https://drive.google.com/drive/u/1/folders/1tW67WtAGv_yVjwyEc_wGGIxxbTJ7oJOJ)下載'checkpoints'資料夾(trained model)，放在目錄'VITON'
 
 ```
 python VITON_demo.py
