@@ -1,6 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
+*.py[co]
 *$py.class
 
 # C extensions
@@ -30,6 +30,17 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+
+
+openpose_python/models
+openpose_python/bin
+human_parse_LIP/models
+flask_session
+
+
+.vscode/settings.json
+
+
 
 # Installer logs
 pip-log.txt

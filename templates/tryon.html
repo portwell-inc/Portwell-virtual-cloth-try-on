@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Portwell Virtual Try on</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
+	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+	<meta name="author" content="FREEHTML5.CO" />
+
+  	<!-- 
+	//////////////////////////////////////////////////////
+
+	FREE HTML5 TEMPLATE 
+	DESIGNED & DEVELOPED by FREEHTML5.CO
+	
+	Website: 		http://freehtml5.co/
+	Email: 			info@freehtml5.co
+	Twitter: 		http://twitter.com/fh5co
+	Facebook: 	https://www.facebook.com/fh5co
+
+	//////////////////////////////////////////////////////
+	 -->
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+
+  	<!-- Google Webfont -->
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+	<!-- Themify Icons -->
+	<link rel="stylesheet" href="../static/css/themify-icons.css">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="../static/css/bootstrap.css">
+	<!-- Owl Carousel -->
+	<link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="../static/css/magnific-popup.css">
+	<!-- Superfish -->
+	<link rel="stylesheet" href="../static/css/superfish.css">
+	<!-- Easy Responsive Tabs -->
+	<link rel="stylesheet" href="../static/css/easy-responsive-tabs.css">
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="../static/css/animate.css">
+	<!-- Theme Style -->
+	<link rel="stylesheet" href="../static/css/style.css">
+
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<script language="JavaScript">
+		var new_pic = ''
+		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        $.getJSON($SCRIPT_ROOT + '/new_picture_get', 
+        	function(data){
+        		document.getElementById('new_pic_con').innerHTML =
+        			'<img width="300px" height="400px" src="'+data['image']+'"/>'
+            }
+        ); 
+	</script>
+</head>
+<body>
+		<!-- START #fh5co-header -->
+		<header id="fh5co-header-section" role="header" class="" >
+			<div class="container">
+				<!-- <div id="fh5co-menu-logo"> -->
+					<!-- START #fh5co-logo -->
+					<h1 id="fh5co-logo" class="pull-left"><a href="index.html"><img src="../static/images/logo.png" alt="Slant Free HTML5 Template"></a></h1>
+					<!-- START #fh5co-menu-wrap -->
+					<nav id="fh5co-menu-wrap" role="navigation">
+						<ul class="sf-menu" id="fh5co-primary-menu">
+							<li><a href="{{ url_for('home') }}">Home</a></li>
+							<li><a href="{{ url_for('home') }}">API</a></li>
+							<li class="active"><a href="{{ url_for('demo') }}">Demo</a></li>
+							<li class="fh5co-special"><a href="{{ url_for('home') }}">Get started</a></li>
+						</ul>
+					</nav>
+				<!-- </div> -->
+			</div>
+		</header>
+		
+		<div><img src="../static/images/hero6.jpg" width="100%" height="70px"/></div>
+
+		<div style="width: 25%; text-align: center; vertical-align: top; display: inline-block;">
+			<div style="height: 50px"></div>
+			<button style="border: 0px; background-color: white;" onclick="location.href='{{ url_for('demo') }}'">
+				<img src="../static/images/camera.png" width="100px" height="100px" background-color="white"/>
+			</button>
+			<div style="font-size: 20px">Retake Photo</div>
+		</div>
+		<div style="width: 25%; text-align: center; vertical-align: top; display: inline-block;">
+			<div style="height: 50px"></div>
+			<div style="width: 320px; height: 420px; border: saddlebrown solid 10px; background-color: lightgrey">
+				<div style="align-content: center;" id="new_pic_con">
+					<!--photo and result-->
+				</div>
+			</div>
+		</div>
+		<div style="width: 45%; text-align: center; vertical-align: top; display: inline-block;">
+			<div style="height: 50px"></div>
+			<div style="width: 100%; height: 420px; overflow-y: scroll;">
+				<!--a cloth-->
+				{% for cloth in cloth_dir %}
+				<div style="width: 210px; height: 280px; position: relative; top: 20px; left: 20px; float: left;">
+					<div style="width: 192px; height: 256px; box-shadow: 0px 0px 5px #000000;">
+						<img src="{{ cloth }}" onclick="VITON('{{ cloth }}')">
+					</div>
+				</div>
+				{% endfor %} 
+				<!--a cloth end-->
+			</div>
+		</div>
+
+		<script language="JavaScript">
+			function VITON(cloth){
+				$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        		$.getJSON($SCRIPT_ROOT + '/VTO_api', {'cloth' : cloth} ,
+        			function(data){
+        				document.getElementById('new_pic_con').innerHTML =
+        				'<img width="300px" height="400px" src="'+data['image']+'"/>'
+            		}
+				);
+			}
+		</script>
+
+		<!-- jQuery -->
+		<script src="../static/js/jquery-1.10.2.min.js"></script>
+		<!-- jQuery Easing -->
+		<script src="../static/js/jquery.easing.1.3.js"></script>
+		<!-- Bootstrap -->
+		<script src="../static/js/bootstrap.js"></script>
+		<!-- Owl carousel -->
+		<script src="../static/js/owl.carousel.min.js"></script>
+		<!-- Magnific Popup -->
+		<script src="../static/js/jquery.magnific-popup.min.js"></script>
+		<!-- Superfish -->
+		<script src="../static/js/hoverIntent.js"></script>
+		<script src="../static/js/superfish.js"></script>
+		<!-- Easy Responsive Tabs -->
+		<script src="../static/js/easyResponsiveTabs.js"></script>
+		<!-- FastClick for Mobile/Tablets -->
+		<script src="../static/js/fastclick.js"></script>
+		<!-- Parallax -->
+		<!-- <script src="../static/js/jquery.parallax-scroll.min.js"></script> -->
+		<!-- Waypoints -->
+		<script src="../static/js/jquery.waypoints.min.js"></script>
+		<!-- Main JS -->
+		<script src="../static/js/main.js"></script>
+
+	</body>
+</html>
