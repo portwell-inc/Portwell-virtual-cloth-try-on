@@ -5,7 +5,7 @@
 2. **請務必使用python 3.6.x**
 ```
 pip install numpy
-pip install opencv
+pip install opencv-python
 ```
 
 ## Demo
