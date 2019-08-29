@@ -9,7 +9,7 @@ pip install keras
 ```
 
 ## Demo
-1. 從[google dirve]('https://drive.google.com/drive/u/1/folders/1j-l9sRqmH1pIKwnM6_9A_zTt-P2KFXlc')下載model資料夾，並放在"human_parse_LIP"目錄下
+1. 從[google dirve](https://drive.google.com/drive/u/1/folders/1j-l9sRqmH1pIKwnM6_9A_zTt-P2KFXlc)下載model資料夾，並放在"human_parse_LIP"目錄下
 2. 在"human_parse_LIP"目錄下創一個"data"資料夾，將欲處理的圖片放在data裡
 
 ```
